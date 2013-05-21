@@ -110,7 +110,7 @@ class Application(tornado.web.Application):
         self.reply_model = self.loader.use("reply.model")
         self.plane_model = self.loader.use("plane.model")
         self.node_model = self.loader.use("node.model")
-        self.province_model = self.loader.use("province.model")
+
         self.notification_model = self.loader.use("notification.model")
         self.vote_model = self.loader.use("vote.model")
         self.favorite_model = self.loader.use("favorite.model")
