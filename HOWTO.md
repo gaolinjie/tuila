@@ -18,19 +18,19 @@ HOWTO deploy on Linode
 	$ pip install supervisor 
 
 ###Config Git
-	$ ssh-keygen -t rsa -C "3n1b.com@gmail.com"
+	$ ssh-keygen -t rsa -C "tuila.me@gmail.com"
 	$ cat ~/.ssh/id_rsa.pub
 	# copy and paste the RSA key to the Deploy keys setting
-	$ git config --global user.name "3n1b.com"  
-	$ git config --global user.email 3n1b.com@gmail.com  
+	$ git config --global user.name "tuila.me"  
+	$ git config --global user.email tuila.me@gmail.com  
 
 ###Make directories for your app
-	$ mkdir /srv/www
+	$ mkdir ~/www
 
 ###Pull in source code
-	$ cd /srv/www/
-	$ git clone git@github.com:gaolinjie/3n1b.com.git
-	$ cd 3n1b.com
+	$ cd ~/www/
+	$ git clone git@github.com:gaolinjie/tuila.git
+	$ cd tuila
 
 ###Install web app required modules
 	$ pip install -r requirements.txt
@@ -53,15 +53,15 @@ HOWTO deploy on Linode
 
 ###Create database and then execute sql file in dbstructure/
 	$ mysql -u root -p
-	mysql> CREATE DATABASE zgeek;
-	mysql> GRANT ALL PRIVILEGES ON zgeek.* TO 'zgeek'@'localhost' IDENTIFIED BY 'zgeek';
+	mysql> CREATE DATABASE tuila;
+	mysql> GRANT ALL PRIVILEGES ON tuila.* TO 'tuila'@'localhost' IDENTIFIED BY 'tuila';
 	mysql> exit
-	$ mysql -u zgeek -p --database=zgeek < dbstructure/zgeek.sql
-	$ mysql -u zgeek -p --database=zgeek < dbstructure/node.sql
-	$ mysql -u zgeek -p --database=zgeek < dbstructure/plane.sql
-	$ mysql -u zgeek -p --database=zgeek < dbstructure/interest.sql
-	$ mysql -u zgeek -p --database=zgeek < dbstructure/follow.sql
-	$ mysql -u zgeek -p --database=zgeek < dbstructure/message.sql
+	$ mysql -u tuila -p --database=tuila < dbstructure/tuila.sql
+	$ mysql -u tuila -p --database=tuila < dbstructure/node.sql
+	$ mysql -u tuila -p --database=tuila < dbstructure/plane.sql
+	$ mysql -u tuila -p --database=tuila < dbstructure/interest.sql
+	$ mysql -u tuila -p --database=tuila < dbstructure/follow.sql
+	$ mysql -u tuila -p --database=tuila < dbstructure/message.sql
 
 ###Install Torndb
         $ cd /
@@ -73,9 +73,9 @@ HOWTO deploy on Linode
 ###Create symbolic links to conf files
 	$ cd /etc/nginx 
 	$ rm nginx.conf
-	$ ln -s /srv/www/zgeek.me/conf/nginx.conf nginx.conf 
+	$ ln -s ~/www/tuila/conf/nginx.conf nginx.conf 
 	$ cd
-	$ ln -s /srv/www/zgeek.me/conf/supervisord.conf supervisord.conf  
+	$ ln -s ~/www/tuila/conf/supervisord.conf supervisord.conf  
 
 ###Create nginx user
 	$ adduser --system --no-create-home --disabled-login --disabled-password --group nginx 
@@ -90,5 +90,5 @@ HOWTO deploy on Linode
 ###Visit your public IP address and enjoy!
 
 ###Update your web app
-	$ cd /srv/www/zgeek.me
+	$ cd ~/www/tuila.me
 	$ git pull

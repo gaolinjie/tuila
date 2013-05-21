@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 #
-# Copyright 2013 zgeek.me
+# Copyright 2013 tuila.me
 
 # cat /etc/mime.types
 # application/octet-stream    crx
@@ -33,14 +33,14 @@ from jinja2 import Environment, FileSystemLoader
 
 define("port", default = 80, help = "run on the given port", type = int)
 define("mysql_host", default = "localhost", help = "community database host")
-define("mysql_database", default = "zgeek", help = "community database name")
-define("mysql_user", default = "zgeek", help = "community database user")
-define("mysql_password", default = "zgeek", help = "community database password")
+define("mysql_database", default = "tuila", help = "community database name")
+define("mysql_user", default = "tuila", help = "community database user")
+define("mysql_password", default = "tuila", help = "community database password")
 
 class Application(tornado.web.Application):
     def __init__(self):
         settings = dict(
-            blog_title = u"zgeek.me",
+            blog_title = u"tuila.me",
             template_path = os.path.join(os.path.dirname(__file__), "templates"),
             static_path = os.path.join(os.path.dirname(__file__), "static"),
             xsrf_cookies = True,

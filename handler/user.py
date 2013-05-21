@@ -14,6 +14,7 @@ import urllib2
 import urllib
 import tornado.web
 import lib.jsonp
+import os.path
 
 from base import *
 from lib.sendmail import send
@@ -124,9 +125,11 @@ class SettingAvatarHandler(BaseHandler):
         avatar_96x96 = avatar.resize((96, 96), Image.ANTIALIAS)
         avatar_48x48 = avatar.resize((48, 48), Image.ANTIALIAS)
         avatar_32x32 = avatar.resize((32, 32), Image.ANTIALIAS)
-        avatar_96x96.save("/home/gao/devs/zgeek.me/static/avatar/b_%s.png" % avatar_name, "PNG")
-        avatar_48x48.save("/home/gao/devs/zgeek.me/static/avatar/m_%s.png" % avatar_name, "PNG")
-        avatar_32x32.save("/home/gao/devs/zgeek.me/static/avatar/s_%s.png" % avatar_name, "PNG")
+        usr_home = os.path.expanduser('~')
+        print usr_home
+        avatar_96x96.save(usr_home+"/www/tuila/static/avatar/b_%s.png" % avatar_name, "PNG")
+        avatar_48x48.save(usr_home+"/www/tuila/static/avatar/m_%s.png" % avatar_name, "PNG")
+        avatar_32x32.save(usr_home+"/www/tuila/static/avatar/s_%s.png" % avatar_name, "PNG")
         result = self.user_model.set_user_avatar_by_uid(user_id, "%s.png" % avatar_name)
         template_variables["success_message"] = [u"用户头像更新成功"]
         # update `updated`
@@ -143,9 +146,11 @@ class SettingAvatarFromGravatarHandler(BaseHandler):
         avatar_96x96 = gravatar.get_image(size = 96, filetype_extension = False)
         avatar_48x48 = gravatar.get_image(size = 48, filetype_extension = False)
         avatar_32x32 = gravatar.get_image(size = 32, filetype_extension = False)
-        urllib.urlretrieve(avatar_96x96, "/home/gao/devs/zgeek.me/static/avatar/b_%s.png" % avatar_name)
-        urllib.urlretrieve(avatar_48x48, "/home/gao/devs/zgeek.me/static/avatar/m_%s.png" % avatar_name)
-        urllib.urlretrieve(avatar_32x32, "/home/gao/devs/zgeek.me/static/avatar/s_%s.png" % avatar_name)
+        usr_home = os.path.expanduser('~')
+        print usr_home
+        urllib.urlretrieve(avatar_96x96, usr_home+"/www/tuila/static/avatar/b_%s.png" % avatar_name)
+        urllib.urlretrieve(avatar_48x48, usr_home+"/www/tuila/static/avatar/m_%s.png" % avatar_name)
+        urllib.urlretrieve(avatar_32x32, usr_home+"/www/tuila/static/avatar/s_%s.png" % avatar_name)
         result = self.user_model.set_user_avatar_by_uid(user_id, "%s.png" % avatar_name)
         template_variables["success_message"] = [u"用户头像更新成功"]
         # update `updated`
@@ -232,7 +237,7 @@ class ForgotPasswordHandler(BaseHandler):
 
         # send password reset link to user
 
-        mail_title = u"ZGEEK（3n1b.com）找回密码"
+        mail_title = u"tuila（tuila.me）找回密码"
         template_variables = {"email": form.email.data, "new_password": new_password};
         template_variables["success_message"] = [u"新密码已发送至您的注册邮箱"]
         mail_content = self.render_string("user/forgot_password_mail.html", **template_variables)
@@ -345,7 +350,7 @@ class RegisterHandler(BaseHandler):
 
             # send register success mail to user
 
-            mail_title = u"叁年壹班 注册成功通知"
+            mail_title = u"tuila.me 注册成功通知"
             mail_content = self.render_string("user/register_mail.html")
             send(mail_title, mail_content, form.email.data)
 
