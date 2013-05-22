@@ -727,7 +727,7 @@ a.btn-small {
   -moz-border-radius: 8px / 8px;
   border-radius: 8px / 8px;
   position: absolute;
-  right: 10px;
+  right: 15px;
   top: 40%;
   background: #bbb;
   font-size: 13px;
@@ -740,6 +740,22 @@ a.btn-small {
   -webkit-border-radius: first-value-of(8px) first-value-of(8px);
   -moz-border-radius: 8px / 8px;
   border-radius: 8px / 8px;
+}
+
+    .topics .topic-item .vote_up {
+  position: absolute;
+  right: 10px;
+  top: 1%;
+  width: 32px;
+  height: 32px;
+}
+
+.topics .topic-item .vote_down {
+  position: absolute;
+  right: 10px;
+  bottom: 1%;
+  width: 32px;
+  height: 32px;
 }
         .topics .topic-item .count a:visited {
   background: #d5d5d5;

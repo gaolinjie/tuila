@@ -56,9 +56,15 @@
             </div>
         </div>
         {% if topic.reply_count %}
+        <a href="/">
+            <img src="/static/images/go-up.png" alt="" class="vote_up" />
+        </a>
         <div class="count">
             <a href="/t/{{ topic.id }}#reply{{ topic.reply_count or 0 }}">{{ topic.reply_count or 0 }}</a>
         </div>
+        <a href="/">
+            <img src="/static/images/go-down.png" alt="" class="vote_down" />
+        </a>
         {% endif %}
     </div>
     {% endfor %}
