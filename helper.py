@@ -131,7 +131,9 @@ class Filters():
         # render content included gist
         content = re.sub(r'http(s)?:\/\/gist.github.com\/(\d+)(.js)?', r'<script src="http://gist.github.com/\2.js"></script>', content)
         # render sinaimg pictures
-        content = re.sub(r'(http:\/\/\w+.sinaimg.cn\/.*?\.(jpg|gif|png))', r'<img src="\1" />', content)
+        # content = re.sub(r'(http:\/\/\w+.sinaimg.cn\/.*?\.(jpg|gif|png))', r'<img src="\1" />', content)
+        # render all pictures
+        content = re.sub(r'(http:\/\/\w+.*\/.*?\.(jpg|gif|png))', r'<img src="\1" />', content)
         # render @ mention links
         content = re.sub(ur'@(?!_)(?!.*?_$)(?!\d+)([a-zA-Z0-9_\u4e00-\u9fa5]+)(\s|)', r'@<a href="/u/\1">\1</a> ', content)
         # render youku videos
