@@ -657,6 +657,31 @@ a.btn-small {
   -moz-border-radius: 5px / 5px 5px 0 0;
   border-radius: 5px / 5px 5px 0 0;
 }
+
+.topics .topic-item .vote {
+  float: left;
+  margin: 0 10px 0 0;
+  display: block;
+  vertical-align: baseline;
+  text-align: center;
+
+}
+
+ .topics .topic-item .vote_up {
+  width: 24px;
+  height: 24px;
+}
+
+.topics .topic-item .vote-score {
+  font-size: 16px;
+  margin: -5px 0 -5px 0;
+}
+
+.topics .topic-item .vote_down {
+  width: 24px;
+  height: 24px;
+}
+
     .topics .topic-item .avatar {
   -webkit-border-radius: first-value-of(3px) first-value-of(3px);
   -moz-border-radius: 3px / 3px;
@@ -723,35 +748,32 @@ a.btn-small {
   margin: 0 5px 0 2px;
 }
     .topics .topic-item .count {
-
-  position: absolute;
-  right: 18px;
-  top: 42%;
-
-  font-size: 16px;
-}
-
-
-    .topics .topic-item .vote_up {
+  -webkit-border-radius: first-value-of(8px) first-value-of(8px);
+  -moz-border-radius: 8px / 8px;
+  border-radius: 8px / 8px;
   position: absolute;
   right: 10px;
-  top: 12%;
-  width: 24px;
-  height: 24px;
+  top: 40%;
+  background: #bbb;
+  font-size: 13px;
+}
+      .topics .topic-item .count a {
+  color: #fff;
+  padding: 3px 8px;
+  display: block;
+  background: #b5bbcf;
+  -webkit-border-radius: first-value-of(8px) first-value-of(8px);
+  -moz-border-radius: 8px / 8px;
+  border-radius: 8px / 8px;
 }
 
-.topics .topic-item .vote_down {
-  position: absolute;
-  right: 10px;
-  bottom: 12%;
-  width: 24px;
-  height: 24px;
-}
+
+   
         .topics .topic-item .count a:visited {
   background: #d5d5d5;
 }
     .topics .topic-item .main {
-  padding: 0 0 0 55px;
+  padding: 0 0 0 90px;
 }
   .topics .pagination {
   margin: 15px 20px;
