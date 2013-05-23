@@ -723,39 +723,29 @@ a.btn-small {
   margin: 0 5px 0 2px;
 }
     .topics .topic-item .count {
-  -webkit-border-radius: first-value-of(8px) first-value-of(8px);
-  -moz-border-radius: 8px / 8px;
-  border-radius: 8px / 8px;
+
   position: absolute;
-  right: 15px;
-  top: 40%;
-  background: #bbb;
-  font-size: 13px;
+  right: 18px;
+  top: 42%;
+
+  font-size: 16px;
 }
-      .topics .topic-item .count a {
-  color: #fff;
-  padding: 3px 8px;
-  display: block;
-  background: #b5bbcf;
-  -webkit-border-radius: first-value-of(8px) first-value-of(8px);
-  -moz-border-radius: 8px / 8px;
-  border-radius: 8px / 8px;
-}
+
 
     .topics .topic-item .vote_up {
   position: absolute;
   right: 10px;
-  top: 1%;
-  width: 32px;
-  height: 32px;
+  top: 12%;
+  width: 24px;
+  height: 24px;
 }
 
 .topics .topic-item .vote_down {
   position: absolute;
   right: 10px;
-  bottom: 1%;
-  width: 32px;
-  height: 32px;
+  bottom: 12%;
+  width: 24px;
+  height: 24px;
 }
         .topics .topic-item .count a:visited {
   background: #d5d5d5;
