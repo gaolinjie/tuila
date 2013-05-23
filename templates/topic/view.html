@@ -85,6 +85,17 @@
 {% block main %}
 <div class="topic-detail container-box">
     <div class="ui-header">
+        <div class="vote">
+            <a href="/">
+                <img src="/static/images/go-up.png" alt="" class="vote-up" />
+            </a>
+            <div class="vote-score">
+            <a href="/">0</a>
+            </div>
+            <a href="/">
+                <img src="/static/images/go-down.png" alt="" class="vote-down" />
+            </a>
+        </div>
         <a href="/u/{{ topic.author_username or topic.author_uid }}">
             <img src="/static/avatar/m_{{ topic.author_avatar or 'default.png' }}?t={{ gen_random() }}" alt="" class="avatar" />
         </a>
@@ -139,6 +150,17 @@
             {% for reply in replies.list %}
             {% set floor = floor + 1 %}
         <div class="reply-item">
+            <div class="vote">
+            <a href="/">
+                <img src="/static/images/go-up.png" alt="" class="vote-up" />
+            </a>
+            <div class="vote-score">
+            <a href="/">0</a>
+            </div>
+            <a href="/">
+                <img src="/static/images/go-down.png" alt="" class="vote-down" />
+            </a>
+        </div>
             <a href="/u/{{ reply.author_username }}">
                 <img src="/static/avatar/m_{{ reply.author_avatar or 'default.png' }}?t={{ gen_random() }}" alt="" class="avatar" />
             </a>
