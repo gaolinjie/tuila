@@ -38,10 +38,14 @@
                 };
                 e.preventDefault();
                 $.getJSON(_node.attr('href'), function(data) {
-                    
+                    if(data.success>0) {
                         _node.html('<a href="/"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" /></a>');
                         tScore.html('<div class="vote-score J_tScore"><a href="/">1</a></div>');
-                    
+                    } else if(data.success<0){
+
+                    } else {
+                        
+                    }
                 });
             });
 
@@ -109,7 +113,7 @@
             <div class="vote-score J_tScore">
             <a href="/">0</a>
             </div>
-            <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
+            <a href="/vote?topic_id=-{{ topic.id }}" class="J_tVote">
                 <img src="/static/images/go-down.png" alt="" class="vote-down" />
             </a>
         </div>

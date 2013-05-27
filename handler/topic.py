@@ -400,6 +400,12 @@ class ProfileHandler(BaseHandler):
 class VoteHandler(BaseHandler):
     def get(self, template_variables = {}):
         topic_id = int(self.get_argument("topic_id"))
+        if topic_id > 0:
+            up = True;
+        else:
+            topic_id = -topic_id;
+            up = False;
+
         topic_info = self.topic_model.get_topic_by_topic_id(topic_id)
 
         if not topic_info:
