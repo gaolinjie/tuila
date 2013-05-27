@@ -28,6 +28,23 @@
     </script>
 <script type="text/javascript">
         jQuery(document).ready(function() {
+            $('.J_tVote').click(function(e) {
+                var _node = $(this);
+                tScore = $('.J_tScore');
+                var _errorMap = {
+                    topic_not_exist: '话题不存在',
+                    can_not_vote_your_topic: '不能喜欢自己的话题',
+                    already_voted: '感谢已经表示过',
+                };
+                e.preventDefault();
+                $.getJSON(_node.attr('href'), function(data) {
+                    
+                        _node.html('<a href="/"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" /></a>');
+                        tScore.html('<div class="vote-score J_tScore"><a href="/">1</a></div>');
+                    
+                });
+            });
+
             $('.J_topicVote').click(function(e) {
                 var _node = $(this);
                 var _errorMap = {
@@ -38,7 +55,7 @@
                 e.preventDefault();
                 $.getJSON(_node.attr('href'), function(data) {
                     if(data.success) {
-                        _node.html('<span class="f11 gray" style="text-shadow: 0px 1px 0px #fff;">感谢已表示</span>');
+                        _node.html('<a href="/"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" /></a>');
                     } else {
                         _node.html('<span>' + _errorMap[data.message] + '</span>');
                     }
@@ -86,13 +103,13 @@
 <div class="topic-detail container-box">
     <div class="ui-header">
         <div class="vote">
-            <a href="/">
+            <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
                 <img src="/static/images/go-up.png" alt="" class="vote-up" />
             </a>
-            <div class="vote-score">
+            <div class="vote-score J_tScore">
             <a href="/">0</a>
             </div>
-            <a href="/">
+            <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
                 <img src="/static/images/go-down.png" alt="" class="vote-down" />
             </a>
         </div>
