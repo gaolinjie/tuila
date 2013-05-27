@@ -401,10 +401,10 @@ class VoteHandler(BaseHandler):
     def get(self, template_variables = {}):
         topic_id = int(self.get_argument("topic_id"))
         if topic_id > 0:
-            up = True;
+            status = 1;
         else:
             topic_id = -topic_id;
-            up = False;
+            status = -1;
 
         topic_info = self.topic_model.get_topic_by_topic_id(topic_id)
 
@@ -422,26 +422,36 @@ class VoteHandler(BaseHandler):
             }))
             return
 
-        if self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"]):
+        pastVote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+        if pastVote:
+            if pastVote["status"] + status:
+                self.write(lib.jsonp.print_JSON({
+                    "success": 0,
+                    "message": "already_voted",
+                }))
+                return
+            else:
+                self.write(lib.jsonp.print_JSON({
+                    "success": status,
+                    "message": "revert_voted",
+                }))
+                self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+                return
+        else:
+            self.vote_model.add_new_vote({
+                "trigger_user_id": self.current_user["uid"],
+                "involved_type": 0, # 0: topic, 1: reply
+                "involved_user_id": topic_info["author_id"],
+                "involved_topic_id": topic_id,
+                "status": status,
+                "occurrence_time": time.strftime('%Y-%m-%d %H:%M:%S'),
+            })
+
             self.write(lib.jsonp.print_JSON({
-                "success": 0,
-                "message": "already_voted",
+                "success": status,
+                "message": "thanks_for_your_vote",
             }))
-            return
-
-        self.vote_model.add_new_vote({
-            "trigger_user_id": self.current_user["uid"],
-            "involved_type": 0, # 0: topic, 1: reply
-            "involved_user_id": topic_info["author_id"],
-            "involved_topic_id": topic_id,
-            "status": 0,
-            "occurrence_time": time.strftime('%Y-%m-%d %H:%M:%S'),
-        })
-
-        self.write(lib.jsonp.print_JSON({
-            "success": 1,
-            "message": "thanks_for_your_vote",
-        }))
+        
 
         # update reputation of topic author
         topic_time_diff = datetime.datetime.now() - topic_info["created"]

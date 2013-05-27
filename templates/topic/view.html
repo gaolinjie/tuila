@@ -30,7 +30,9 @@
         jQuery(document).ready(function() {
             $('.J_tVote').click(function(e) {
                 var _node = $(this);
-                tScore = $('.J_tScore');
+                var _node2;
+                var tScore = $('.J_tScore');
+                var score = parseInt(tScore.text())
                 var _errorMap = {
                     topic_not_exist: '话题不存在',
                     can_not_vote_your_topic: '不能喜欢自己的话题',
@@ -39,11 +41,28 @@
                 e.preventDefault();
                 $.getJSON(_node.attr('href'), function(data) {
                     if(data.success>0) {
-                        _node.html('<a href="/"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" /></a>');
-                        tScore.html('<div class="vote-score J_tScore"><a href="/">1</a></div>');
+                        _node2 = $('.vote-down');
+                        if (data.message == "revert_voted") {
+                            _node2.html('<img src="/static/images/go-down.png" alt="" class="vote-down" />');
+                        } else {
+                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" /></a>');
+                        }
+                        
+                        score = score + 1;
+                        tScore.html('<div class="vote-score J_tScore"><a href="/">' + score.toString() + '</a></div>');
                     } else if(data.success<0){
+                        _node2 = $('.vote-up');
+                        if (data.message == "revert_voted") {
+                            _node2.html('<img src="/static/images/go-up.png" alt="" class="vote-up" />');
+                        } else {
+                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_down_red.png" alt="" class="vote-down" /></a>');
+                        }
+                        _
+                        score = score - 1;
+                        tScore.html('<div class="vote-score J_tScore"><a href="/">'+ score.toString() + '</a></div>');
 
                     } else {
+
                         
                     }
                 });
