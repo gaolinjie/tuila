@@ -31,8 +31,8 @@
             $('.J_tVote').click(function(e) {
                 var _node = $(this);
                 var _node2;
-                var tScore = $('.J_tScore');
-                var score = parseInt(tScore.text())
+                var tScore = document.getElementById('score_text');
+                var score = parseInt(tScore.innerHTML)
                 var _errorMap = {
                     topic_not_exist: '话题不存在',
                     can_not_vote_your_topic: '不能喜欢自己的话题',
@@ -41,25 +41,27 @@
                 e.preventDefault();
                 $.getJSON(_node.attr('href'), function(data) {
                     if(data.success>0) {
-                        _node2 = $('.vote-down');
+                        _node2 = document.getElementById('votedown');
                         if (data.message == "revert_voted") {
-                            _node2.html('<img src="/static/images/go-down.png" alt="" class="vote-down" />');
+                            _node2.src = "http://localhost:9001/static/images/go-down.png"
+                            //_node2.html('<img src="/static/images/go-down.png" alt="" class="vote-down" />');
                         } else {
-                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" /></a>');
+                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" id="voteup"/></a>');
                         }
                         
                         score = score + 1;
-                        tScore.html('<div class="vote-score J_tScore"><a href="/">' + score.toString() + '</a></div>');
+                        tScore.innerHTML = score;
                     } else if(data.success<0){
-                        _node2 = $('.vote-up');
+                        _node2 = document.getElementById('voteup');
                         if (data.message == "revert_voted") {
-                            _node2.html('<img src="/static/images/go-up.png" alt="" class="vote-up" />');
+                            _node2.src = "http://localhost:9001/static/images/go-up.png"
+                            //_node2.html('<img src="/static/images/go-up.png" alt="" class="vote-up" />');
                         } else {
-                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_down_red.png" alt="" class="vote-down" /></a>');
+                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_down_red.png" alt="" class="vote-down" id="votedown"/></a>');
                         }
                         _
                         score = score - 1;
-                        tScore.html('<div class="vote-score J_tScore"><a href="/">'+ score.toString() + '</a></div>');
+                        tScore.innerHTML = score;
 
                     } else {
 
@@ -127,13 +129,13 @@
     <div class="ui-header">
         <div class="vote">
             <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
-                <img src="/static/images/go-up.png" alt="" class="vote-up" />
+                <img src="/static/images/go-up.png" alt="" class="vote-up" id="voteup" />
             </a>
-            <div class="vote-score J_tScore">
-            <a href="/">0</a>
-            </div>
+
+            <p id="score_text" class="vote-score J_tScore">0</p>
+
             <a href="/vote?topic_id=-{{ topic.id }}" class="J_tVote">
-                <img src="/static/images/go-down.png" alt="" class="vote-down" />
+                <img src="/static/images/go-down.png" alt="" class="vote-down" id="votedown"/>
             </a>
         </div>
         <a href="/u/{{ topic.author_username or topic.author_uid }}">
