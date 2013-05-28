@@ -132,7 +132,9 @@
                 <img src="/static/images/go-up.png" alt="" class="vote-up" id="voteup" />
             </a>
 
-            <p id="score_text" class="vote-score J_tScore">0</p>
+            <div class="vote-score J_tScore">
+                <a id="score_text" class="vote-score J_tScore" href="/">0</a>
+            </div>
 
             <a href="/vote?topic_id=-{{ topic.id }}" class="J_tVote">
                 <img src="/static/images/go-down.png" alt="" class="vote-down" id="votedown"/>
