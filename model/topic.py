@@ -12,10 +12,11 @@ class TopicModel(Query):
         self.table_name = "topic"
         super(TopicModel, self).__init__()
 
-    def get_all_topics(self, num = 32, current_page = 1):
+    def get_all_topics(self, uid, num = 32, current_page = 1):
         join = "LEFT JOIN user AS author_user ON topic.author_id = author_user.uid \
                 LEFT JOIN node ON topic.node_id = node.id \
-                LEFT JOIN user AS last_replied_user ON topic.last_replied_by = last_replied_user.uid"
+                LEFT JOIN user AS last_replied_user ON topic.last_replied_by = last_replied_user.uid \
+                LEFT JOIN vote ON (topic.id = vote.involved_topic_id) AND (%s = vote.trigger_user_id)" % uid
         order = "last_touched DESC, created DESC, last_replied_time DESC, id DESC"
         field = "topic.*, \
                 author_user.username as author_username, \
@@ -26,7 +27,8 @@ class TopicModel(Query):
                 node.name as node_name, \
                 node.slug as node_slug, \
                 last_replied_user.username as last_replied_username, \
-                last_replied_user.nickname as last_replied_nickname"
+                last_replied_user.nickname as last_replied_nickname, \
+                vote.status as vote_status"
         return self.order(order).join(join).field(field).pages(current_page = current_page, list_rows = num)
 
     def get_all_topics_by_node_slug(self, num = 32, current_page = 1, node_slug = None):
@@ -111,4 +113,8 @@ class TopicModel(Query):
         field = "topic.*,\
                 author_user.avatar as author_avatar"
         return self.where(where).join(join).order(order).field(field).limit(10).select()
+
+    def update_topic_score_by_topic_id(self, topic_id, topic_info):
+        where = "topic.id = %s" % topic_id
+        return self.where(where).data(topic_info).save()
 

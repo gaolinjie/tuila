@@ -39,7 +39,7 @@ class IndexHandler(BaseHandler):
                 "favorites": self.favorite_model.get_user_favorite_count(user_info["uid"]),
             }
             if(tab=="index"):
-                template_variables["topics"] = self.topic_model.get_all_topics(current_page = page)           
+                template_variables["topics"] = self.topic_model.get_all_topics(uid = user_info["uid"], current_page = page)           
             if(tab=="interest"):
                 template_variables["topics"] = self.interest_model.get_user_all_interest_topics(user_id = user_info["uid"], current_page = page)
             if(tab=="follows"):
@@ -49,7 +49,7 @@ class IndexHandler(BaseHandler):
                 self.redirect("/register")
             if(tab=="follows"):
                 self.redirect("/register")
-            template_variables["topics"] = self.topic_model.get_all_topics(current_page = page);
+            template_variables["topics"] = self.topic_model.get_all_topics(0, current_page = page);
 
         template_variables["status_counter"] = {
             "users": self.user_model.get_all_users_count(),
@@ -121,11 +121,6 @@ class ViewHandler(BaseHandler):
             }
         template_variables["gen_random"] = gen_random
         template_variables["topic"] = self.topic_model.get_topic_by_topic_id(topic_id)
-
-        up_vote_count = self.vote_model.get_up_vote_count_by_topic_id(topic_id)
-        down_vote_count = self.vote_model.get_down_vote_count_by_topic_id(topic_id)
-        vote_score = up_vote_count - down_vote_count
-        template_variables["vote_score"] = vote_score
 
         vote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
         if (vote):
@@ -447,7 +442,6 @@ class VoteHandler(BaseHandler):
                     "message": "revert_voted",
                 }))
                 self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
-                return
         else:
             self.vote_model.add_new_vote({
                 "trigger_user_id": self.current_user["uid"],
@@ -462,7 +456,13 @@ class VoteHandler(BaseHandler):
                 "success": status,
                 "message": "thanks_for_your_vote",
             }))
-        
+
+        score = topic_info["score"]
+        score = score + status
+
+        self.topic_model.update_topic_score_by_topic_id(topic_id, {
+            "score": score,
+        })
 
         # update reputation of topic author
         topic_time_diff = datetime.datetime.now() - topic_info["created"]

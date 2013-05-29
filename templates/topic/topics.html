@@ -27,14 +27,24 @@
     {% for topic in topics.list %}
     <div class="topic-item">
         <div class="vote">
-            <a href="/">
-                <img src="/static/images/go-up.png" alt="" class="vote-up" />
+            <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
+                {% if topic.vote_status==1 %}
+                <img src="/static/images/sort_up_green.png" alt="" class="vote-up" id="voteup" />
+                {% else %}
+                <img src="/static/images/go-up.png" alt="" class="vote-up" id="voteup" />
+                {% endif %}
             </a>
-            <div class="vote-score">
-            <a href="/">0</a>
+
+            <div class="vote-score J_tScore">
+                <a id="score_text" class="vote-score J_tScore" href="/">{{ topic.score }}</a>
             </div>
-            <a href="/">
-                <img src="/static/images/go-down.png" alt="" class="vote-down" />
+
+            <a href="/vote?topic_id=-{{ topic.id }}" class="J_tVote">
+                {% if topic.vote_status==-1 %}
+                <img src="/static/images/sort_down_red.png" alt="" class="vote-down" id="votedown"/>
+                {% else %}
+                <img src="/static/images/go-down.png" alt="" class="vote-down" id="votedown"/>
+                {% endif %}
             </a>
         </div>
         <a href="/u/{{ topic.author_username }}">

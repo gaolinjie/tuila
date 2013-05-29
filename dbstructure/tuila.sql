@@ -59,8 +59,7 @@ CREATE TABLE `reply` (
   `content` text,
   `created` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
-  `up_vote` int(11) DEFAULT NULL,
-  `down_vote` int(11) DEFAULT NULL,
+  `score` int(11) DEFAULT 0,
   `last_touched` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -82,8 +81,7 @@ CREATE TABLE `topic` (
   `reply_count` int(11) DEFAULT NULL,
   `last_replied_by` text,
   `last_replied_time` datetime DEFAULT NULL,
-  `up_vote` int(11) DEFAULT NULL,
-  `down_vote` int(11) DEFAULT NULL,
+  `score` int(11) DEFAULT 0,
   `last_touched` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
