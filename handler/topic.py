@@ -122,6 +122,17 @@ class ViewHandler(BaseHandler):
         template_variables["gen_random"] = gen_random
         template_variables["topic"] = self.topic_model.get_topic_by_topic_id(topic_id)
 
+        up_vote_count = self.vote_model.get_up_vote_count_by_topic_id(topic_id)
+        down_vote_count = self.vote_model.get_down_vote_count_by_topic_id(topic_id)
+        vote_score = up_vote_count - down_vote_count
+        template_variables["vote_score"] = vote_score
+
+        vote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+        if (vote):
+            template_variables["vote_status"] = vote["status"]
+        else:
+            template_variables["vote_status"] = 0
+
         # check reply count and cal current_page if `p` not given
         reply_num = 16
         reply_count = template_variables["topic"]["reply_count"]

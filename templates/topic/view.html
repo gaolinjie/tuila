@@ -43,7 +43,7 @@
                     if(data.success>0) {
                         _node2 = document.getElementById('votedown');
                         if (data.message == "revert_voted") {
-                            _node2.src = "http://localhost:9001/static/images/go-down.png"
+                            _node2.src = "/static/images/go-down.png"
                             //_node2.html('<img src="/static/images/go-down.png" alt="" class="vote-down" />');
                         } else {
                             _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" id="voteup"/></a>');
@@ -54,7 +54,7 @@
                     } else if(data.success<0){
                         _node2 = document.getElementById('voteup');
                         if (data.message == "revert_voted") {
-                            _node2.src = "http://localhost:9001/static/images/go-up.png"
+                            _node2.src = "/static/images/go-up.png"
                             //_node2.html('<img src="/static/images/go-up.png" alt="" class="vote-up" />');
                         } else {
                             _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_down_red.png" alt="" class="vote-down" id="votedown"/></a>');
@@ -129,15 +129,23 @@
     <div class="ui-header">
         <div class="vote">
             <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
+                {% if vote_status==1 %}
+                <img src="/static/images/sort_up_green.png" alt="" class="vote-up" id="voteup" />
+                {% else %}
                 <img src="/static/images/go-up.png" alt="" class="vote-up" id="voteup" />
+                {% endif %}
             </a>
 
             <div class="vote-score J_tScore">
-                <a id="score_text" class="vote-score J_tScore" href="/">0</a>
+                <a id="score_text" class="vote-score J_tScore" href="/">{{ vote_score }}</a>
             </div>
 
             <a href="/vote?topic_id=-{{ topic.id }}" class="J_tVote">
+                {% if vote_status==-1 %}
+                <img src="/static/images/sort_down_red.png" alt="" class="vote-down" id="votedown"/>
+                {% else %}
                 <img src="/static/images/go-down.png" alt="" class="vote-down" id="votedown"/>
+                {% endif %}
             </a>
         </div>
         <a href="/u/{{ topic.author_username or topic.author_uid }}">

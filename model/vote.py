@@ -23,3 +23,11 @@ class VoteModel(Query):
     	where = "involved_topic_id = %s AND trigger_user_id = %s" % (topic_id, trigger_user_id)
         return self.where(where).delete()
 
+    def get_up_vote_count_by_topic_id(self, topic_id):
+        where = "involved_topic_id = %s AND status = 1" % topic_id
+        return self.where(where).count()
+
+    def get_down_vote_count_by_topic_id(self, topic_id):
+        where = "involved_topic_id = %s AND status = -1" % topic_id
+        return self.where(where).count()
+
