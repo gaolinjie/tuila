@@ -1,5 +1,44 @@
 {% extends 'snippet/layout.html' %}
 
+{% block javascript %}
+<script type="text/javascript">
+        jQuery(document).ready(function() {
+            $('div.answer img.vote').click(function() {
+                var id = $(this).parents('div.answer').attr('id').split('_')[1];
+                var vote_type = $(this).hasClass('up') ? 'up' : 'down';
+                var lid = $(this).hasClass('up') ? id : -id;
+                var un_vote_type = $(this).hasClass('up') ? 'down' : 'up';
+                var val = $(this).hasClass('up') ? 1 : -1;
+                var score = parseInt($('div.score_'+id).text())
+                if(!$(this).hasClass('selected')) {
+                    if($('img.'+un_vote_type).hasClass('selected')) {
+                        $.getJSON('/vote?topic_id='+lid, function(data) {
+                            if(data.success!=0) {
+                                $('#answer_' + id)
+                                    .find('img.' + un_vote_type)
+                                    .attr('src', '/static/images/vote_' + un_vote_type + '.png')
+                                    .removeClass('selected');
+                                    $('div.score_' + id, '#answer_' + id).html(score+val);
+                            }
+                        });
+                        return;
+                    }
+
+                    $.getJSON('/vote?topic_id='+lid, function(data) {
+                        if(data.success!=0) {
+                            $('#answer_' + id)
+                                .find('img.' + vote_type)
+                                .attr('src', '/static/images/vote_' + vote_type + '_selected.png')
+                                .addClass('selected');
+                            $('div.score_' + id, '#answer_' + id).html(score+val);
+                        }
+                    });                        
+                } 
+            });        
+        });
+    </script>
+{% endblock %}
+
 {% block main %}
 <div class="subnav">
     {% set tab_bar = [
@@ -26,26 +65,20 @@
     
     {% for topic in topics.list %}
     <div class="topic-item">
-        <div class="vote">
-            <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
-                {% if topic.vote_status==1 %}
-                <img src="/static/images/sort_up_green.png" alt="" class="vote-up" id="voteup" />
-                {% else %}
-                <img src="/static/images/go-up.png" alt="" class="vote-up" id="voteup" />
-                {% endif %}
-            </a>
+        <div id="answer_{{ topic.id }}" class="answer">
+            {% if topic.vote_status==1 %}
+            <img src="/static/images/vote_up_selected.png" class="vote up selected">
+            {% else %}
+            <img src="/static/images/vote_up.png" class="vote up">
+            {% endif %}
+            
+            <div class="score_{{ topic.id }}">{{ topic.score }}</div>
 
-            <div class="vote-score J_tScore">
-                <a id="score_text" class="vote-score J_tScore" href="/">{{ topic.score }}</a>
-            </div>
-
-            <a href="/vote?topic_id=-{{ topic.id }}" class="J_tVote">
-                {% if topic.vote_status==-1 %}
-                <img src="/static/images/sort_down_red.png" alt="" class="vote-down" id="votedown"/>
-                {% else %}
-                <img src="/static/images/go-down.png" alt="" class="vote-down" id="votedown"/>
-                {% endif %}
-            </a>
+            {% if topic.vote_status==-1 %}
+            <img src="/static/images/vote_down_selected.png" class="vote down selected">
+            {% else %}
+            <img src="/static/images/vote_down.png" class="vote down">
+            {% endif %}           
         </div>
         <a href="/u/{{ topic.author_username }}">
             <img src="/static/avatar/m_{{ topic.author_avatar or 'default.png' }}" alt="" class="avatar" />

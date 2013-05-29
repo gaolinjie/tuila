@@ -658,7 +658,7 @@ a.btn-small {
   border-radius: 5px / 5px 5px 0 0;
 }
 
-.topics .topic-item .vote {
+.topics .topic-item .answer {
   float: left;
   margin: 0 10px 0 0;
   display: block;
@@ -667,20 +667,16 @@ a.btn-small {
 
 }
 
- .topics .topic-item .vote-up {
+ .topics .topic-item .answer .vote {
   width: 24px;
   height: 24px;
 }
 
-.topics .topic-item .vote-score {
+.topics .topic-item .answer .score {
   font-size: 16px;
   margin: -5px 0 -5px 0;
 }
 
-.topics .topic-item .vote-down {
-  width: 24px;
-  height: 24px;
-}
 
     .topics .topic-item .avatar {
   -webkit-border-radius: first-value-of(3px) first-value-of(3px);
@@ -1010,7 +1006,7 @@ a.btn-small {
   background-image: -o-linear-gradient(top, white, whitesmoke);
   background-image: linear-gradient(to bottom, white, whitesmoke);
 }
-.topic-detail .ui-header .vote {
+.topic-detail .ui-header .answer {
   float: left;
   margin: 0 10px 0 0;
   display: block;
@@ -1019,20 +1015,16 @@ a.btn-small {
 
 }
 
- .topic-detail .ui-header .vote-up {
+ .topic-detail .ui-header .answer .vote {
   width: 24px;
   height: 24px;
 }
 
-.topic-detail .ui-header .vote-score {
+.topic-detail .ui-header .answer .score {
   font-size: 16px;
   margin: -5px 0 -5px 0;
 }
 
-.topic-detail .ui-header .vote-down {
-  width: 24px;
-  height: 24px;
-}
 
 .topic-detail .ui-header .main {
   padding: 0 0 0 35px;

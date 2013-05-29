@@ -28,47 +28,7 @@
     </script>
 <script type="text/javascript">
         jQuery(document).ready(function() {
-            $('.J_tVote').click(function(e) {
-                var _node = $(this);
-                var _node2;
-                var tScore = document.getElementById('score_text');
-                var score = parseInt(tScore.innerHTML)
-                var _errorMap = {
-                    topic_not_exist: '话题不存在',
-                    can_not_vote_your_topic: '不能喜欢自己的话题',
-                    already_voted: '感谢已经表示过',
-                };
-                e.preventDefault();
-                $.getJSON(_node.attr('href'), function(data) {
-                    if(data.success>0) {
-                        _node2 = document.getElementById('votedown');
-                        if (data.message == "revert_voted") {
-                            _node2.src = "/static/images/go-down.png"
-                            //_node2.html('<img src="/static/images/go-down.png" alt="" class="vote-down" />');
-                        } else {
-                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_up_green.png" alt="" class="vote-up" id="voteup"/></a>');
-                        }
-                        
-                        score = score + 1;
-                        tScore.innerHTML = score;
-                    } else if(data.success<0){
-                        _node2 = document.getElementById('voteup');
-                        if (data.message == "revert_voted") {
-                            _node2.src = "/static/images/go-up.png"
-                            //_node2.html('<img src="/static/images/go-up.png" alt="" class="vote-up" />');
-                        } else {
-                            _node.html('<a href='+_node.attr('href')+' class="J_tVote"><img src="/static/images/sort_down_red.png" alt="" class="vote-down" id="votedown"/></a>');
-                        }
-                        _
-                        score = score - 1;
-                        tScore.innerHTML = score;
-
-                    } else {
-
-                        
-                    }
-                });
-            });
+            
 
             $('.J_topicVote').click(function(e) {
                 var _node = $(this);
@@ -120,6 +80,39 @@
                 replyContent.focus();
                 replyContent.val(newContent);
             });
+
+            $('div.answer img.vote').click(function() {
+                var id = $(this).parents('div.answer').attr('id').split('_')[1];
+                var vote_type = $(this).hasClass('up') ? 'up' : 'down';
+                var lid = $(this).hasClass('up') ? id : -id;
+                var un_vote_type = $(this).hasClass('up') ? 'down' : 'up';
+                var val = $(this).hasClass('up') ? 1 : -1;
+                var score = parseInt($('div.score').text())
+                if(!$(this).hasClass('selected')) {
+                    if($('img.'+un_vote_type).hasClass('selected')) {
+                        $.getJSON('/vote?topic_id='+lid, function(data) {
+                            if(data.success!=0) {
+                                $('#answer_' + id)
+                                    .find('img.' + un_vote_type)
+                                    .attr('src', '/static/images/vote_' + un_vote_type + '.png')
+                                    .removeClass('selected');
+                                    $('div.score', '#answer_' + id).html(score+val);
+                            }
+                        });
+                        return;
+                    }
+
+                    $.getJSON('/vote?topic_id='+lid, function(data) {
+                        if(data.success!=0) {
+                            $('#answer_' + id)
+                                .find('img.' + vote_type)
+                                .attr('src', '/static/images/vote_' + vote_type + '_selected.png')
+                                .addClass('selected');
+                            $('div.score', '#answer_' + id).html(score+val);
+                        }
+                    });                        
+                } 
+            });        
         });
     </script>
 {% endblock %}
@@ -127,27 +120,22 @@
 {% block main %}
 <div class="topic-detail container-box">
     <div class="ui-header">
-        <div class="vote">
-            <a href="/vote?topic_id={{ topic.id }}" class="J_tVote">
-                {% if vote_status==1 %}
-                <img src="/static/images/sort_up_green.png" alt="" class="vote-up" id="voteup" />
-                {% else %}
-                <img src="/static/images/go-up.png" alt="" class="vote-up" id="voteup" />
-                {% endif %}
-            </a>
+        <div id="answer_{{ topic.id }}" class="answer">
+            {% if vote_status==1 %}
+            <img src="/static/images/vote_up_selected.png" class="vote up selected">
+            {% else %}
+            <img src="/static/images/vote_up.png" class="vote up">
+            {% endif %}
+            
+            <div class="score">{{ topic.score }}</div>
 
-            <div class="vote-score J_tScore">
-                <a id="score_text" class="vote-score J_tScore" href="/">{{ topic.score }}</a>
-            </div>
-
-            <a href="/vote?topic_id=-{{ topic.id }}" class="J_tVote">
-                {% if vote_status==-1 %}
-                <img src="/static/images/sort_down_red.png" alt="" class="vote-down" id="votedown"/>
-                {% else %}
-                <img src="/static/images/go-down.png" alt="" class="vote-down" id="votedown"/>
-                {% endif %}
-            </a>
+            {% if vote_status==-1 %}
+            <img src="/static/images/vote_down_selected.png" class="vote down selected">
+            {% else %}
+            <img src="/static/images/vote_down.png" class="vote down">
+            {% endif %}           
         </div>
+
         <a href="/u/{{ topic.author_username or topic.author_uid }}">
             <img src="/static/avatar/m_{{ topic.author_avatar or 'default.png' }}?t={{ gen_random() }}" alt="" class="avatar" />
         </a>
