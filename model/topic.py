@@ -17,7 +17,7 @@ class TopicModel(Query):
                 LEFT JOIN node ON topic.node_id = node.id \
                 LEFT JOIN user AS last_replied_user ON topic.last_replied_by = last_replied_user.uid \
                 LEFT JOIN vote ON (topic.id = vote.involved_topic_id) AND (%s = vote.trigger_user_id)" % uid
-        order = "last_touched DESC, created DESC, last_replied_time DESC, id DESC"
+        order = "hot DESC, created DESC, last_replied_time DESC, id DESC"
         field = "topic.*, \
                 author_user.username as author_username, \
                 author_user.nickname as author_nickname, \

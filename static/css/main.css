@@ -1103,6 +1103,10 @@ a.btn-small {
   padding: 10px 0;
 }
 
+.topic-reply .ui-content .hot {
+  background-color: #ffc
+}
+
 .topic-reply .ui-content .reply-item .vote-reply {
   float: left;
   margin: 0 10px 0 0;

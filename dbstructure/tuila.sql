@@ -82,6 +82,7 @@ CREATE TABLE `topic` (
   `last_replied_by` text,
   `last_replied_time` datetime DEFAULT NULL,
   `score` int(11) DEFAULT 0,
+  `hot` double(32,7) DEFAULT 0,
   `last_touched` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

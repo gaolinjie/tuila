@@ -23,6 +23,7 @@ from form.topic import *
 from lib.variables import gen_random
 from lib.xss import XssCleaner
 from lib.utils import find_mentions
+from lib.reddit import hot
 
 class IndexHandler(BaseHandler):
     def get(self, template_variables = {}):
@@ -482,9 +483,12 @@ class VoteHandler(BaseHandler):
 
             score = topic_info["score"]
             score = score + success
+            h = hot(score, topic_info["created"])
+            print h
 
             self.topic_model.update_topic_score_by_topic_id(topic_id, {
                 "score": score,
+                "hot": h
             })
         else:
             if reply_id > 0:

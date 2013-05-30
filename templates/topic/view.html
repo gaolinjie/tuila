@@ -225,7 +225,11 @@
         {% set floor = reply_num * (current_page - 1) %}
             {% for reply in replies.list %}
             {% set floor = floor + 1 %}
-        <div class="reply-item">
+        {% if reply.score>0 %}
+        <div class="reply-item hot" >
+        {% else %}
+        <div class="reply-item" >
+        {% endif %}
             <div id="vote-reply_{{ reply.id }}" class="vote-reply">
                 {% if reply.vote_status==1 %}
                 <img src="/static/images/vote_up_selected.png" class="vote-reply-img up selected">
