@@ -8,7 +8,7 @@
                 var lid = $(this).hasClass('up') ? id : -id;
                 var vote_type = $(this).hasClass('up') ? 'up' : 'down';
                 var un_vote_type = $(this).hasClass('up') ? 'down' : 'up';
-                var score = parseInt($('div.score_'+id).text())
+                var score = parseInt($('#score-topic_'+id).text())
                 if($(this).hasClass('selected')) {
                         $.getJSON('/vote?topic_id='+lid, function(data) {
                             if(data.success!=0) {
@@ -16,7 +16,7 @@
                                     .find('img.' + vote_type)
                                     .attr('src', '/static/images/vote_' + vote_type + '.png')
                                     .removeClass('selected');
-                                    $('div.score_' + id, '#vote-topic_' + id).html(score+data.success);
+                                    $('#score-topic_' + id, '#vote-topic_' + id).html(score+data.success);
                             }
                         });                        
                 } else {
@@ -26,7 +26,7 @@
                                 .find('img.' + vote_type)
                                 .attr('src', '/static/images/vote_' + vote_type + '_selected.png')
                                 .addClass('selected');
-                            $('div.score_' + id, '#vote-topic_' + id).html(score+data.success);
+                            $('#score-topic_' + id, '#vote-topic_' + id).html(score+data.success);
                         }
                         if(data.message=="reverse_voted") {
                             $('#vote-topic_' + id)
@@ -74,7 +74,7 @@
             <img src="/static/images/vote_up.png" class="vote up">
             {% endif %}
             
-            <div class="score_{{ topic.id }} score-topic">{{ topic.score }}</div>
+            <div id="score-topic_{{ topic.id }}" class="score-topic">{{ topic.score }}</div>
 
             {% if topic.vote_status==-1 %}
             <img src="/static/images/vote_down_selected.png" class="vote down selected">

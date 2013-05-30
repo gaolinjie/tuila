@@ -136,7 +136,7 @@ class ViewHandler(BaseHandler):
         template_variables["reply_num"] = reply_num
         template_variables["current_page"] = page
 
-        template_variables["replies"] = self.reply_model.get_all_replies_by_topic_id(topic_id, current_page = page)
+        template_variables["replies"] = self.reply_model.get_all_replies_by_topic_id(topic_id, self.current_user["uid"], current_page = page)
         template_variables["active_page"] = "topic"
         template_variables["hot_nodes"] = self.node_model.get_all_hot_nodes()
 
@@ -404,85 +404,166 @@ class ProfileHandler(BaseHandler):
         self.render("topic/profile.html", **template_variables)
 
 class VoteHandler(BaseHandler):
-    def get(self, template_variables = {}):
-        topic_id = int(self.get_argument("topic_id"))
-        if topic_id > 0:
-            status = 1;
+    def get(self, template_variables = {}):       
+        topic_id = int(self.get_argument("topic_id", "0"))
+        reply_id = int(self.get_argument("reply_id", "0"))
+        if topic_id != 0:
+            vote_type = "vote_topic"
         else:
-            topic_id = -topic_id;
-            status = -1;
+            vote_type = "vote_reply"
 
-        topic_info = self.topic_model.get_topic_by_topic_id(topic_id)
-
-        if not topic_info:
-            self.write(lib.jsonp.print_JSON({
-                "success": 0,
-                "message": "topic_not_exist",
-            }))
-            return
-
-        if self.current_user["uid"] == topic_info["author_id"]:
-            self.write(lib.jsonp.print_JSON({
-                "success": 0,
-                "message": "can_not_vote_your_topic",
-            }))
-            return
-
-        success = 0
-        pastVote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
-        if pastVote:
-            if pastVote["status"] + status == 2:
-                success = -1
-                self.write(lib.jsonp.print_JSON({
-                    "success": success,
-                    "message": "revert_voted",
-                }))
-                self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
-            elif pastVote["status"] + status == -2:
-                success = 1
-                self.write(lib.jsonp.print_JSON({
-                    "success": success,
-                    "message": "revert_voted",
-                }))
-                self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+        if vote_type == "vote_topic":
+            if topic_id > 0:
+                status = 1;
             else:
-                success = status - pastVote["status"]
+                topic_id = -topic_id;
+                status = -1;
+
+            topic_info = self.topic_model.get_topic_by_topic_id(topic_id)
+
+            if not topic_info:
                 self.write(lib.jsonp.print_JSON({
-                    "success": success,
-                    "message": "reverse_voted",
+                    "success": 0,
+                    "message": "topic_not_exist",
                 }))
-                self.vote_model.update_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"], {
-                    "status": status
+                return
+
+            if self.current_user["uid"] == topic_info["author_id"]:
+                self.write(lib.jsonp.print_JSON({
+                    "success": 0,
+                    "message": "can_not_vote_your_topic",
+                }))
+                return
+
+            success = 0
+            pastVote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+            if pastVote:
+                if pastVote["status"] + status == 2:
+                    success = -1
+                    self.write(lib.jsonp.print_JSON({
+                        "success": success,
+                        "message": "revert_voted",
+                    }))
+                    self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+                elif pastVote["status"] + status == -2:
+                    success = 1
+                    self.write(lib.jsonp.print_JSON({
+                        "success": success,
+                        "message": "revert_voted",
+                    }))
+                    self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+                else:
+                    success = status - pastVote["status"]
+                    self.write(lib.jsonp.print_JSON({
+                        "success": success,
+                        "message": "reverse_voted",
+                    }))
+                    self.vote_model.update_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"], {
+                        "status": status
                     })
                 
+            else:
+                self.vote_model.add_new_vote({
+                    "trigger_user_id": self.current_user["uid"],
+                    "involved_type": 0, # 0: topic, 1: reply
+                    "involved_user_id": topic_info["author_id"],
+                    "involved_topic_id": topic_id,
+                    "status": status,
+                    "occurrence_time": time.strftime('%Y-%m-%d %H:%M:%S'),
+                })
+
+                success = status
+                self.write(lib.jsonp.print_JSON({
+                    "success": success,
+                    "message": "thanks_for_your_vote",
+                }))
+
+            score = topic_info["score"]
+            score = score + success
+
+            self.topic_model.update_topic_score_by_topic_id(topic_id, {
+                "score": score,
+            })
         else:
-            self.vote_model.add_new_vote({
-                "trigger_user_id": self.current_user["uid"],
-                "involved_type": 0, # 0: topic, 1: reply
-                "involved_user_id": topic_info["author_id"],
-                "involved_topic_id": topic_id,
-                "status": status,
-                "occurrence_time": time.strftime('%Y-%m-%d %H:%M:%S'),
+            if reply_id > 0:
+                status = 1;
+            else:
+                reply_id = -reply_id;
+                status = -1;
+
+            reply_info = self.reply_model.get_reply_by_reply_id(reply_id)
+
+            if not reply_info:
+                self.write(lib.jsonp.print_JSON({
+                    "success": 0,
+                    "message": "reply_not_exist",
+                }))
+                return
+
+            if self.current_user["uid"] == reply_info["author_id"]:
+                self.write(lib.jsonp.print_JSON({
+                    "success": 0,
+                    "message": "can_not_vote_your_reply",
+                }))
+                return
+
+            success = 0
+            pastVote = self.vote_model.get_vote_by_reply_id_and_trigger_user_id(reply_id, self.current_user["uid"])
+            if pastVote:
+                if pastVote["status"] + status == 2:
+                    success = -1
+                    self.write(lib.jsonp.print_JSON({
+                        "success": success,
+                        "message": "revert_voted",
+                    }))
+                    self.vote_model.delete_vote_by_reply_id_and_trigger_user_id(reply_id, self.current_user["uid"])
+                elif pastVote["status"] + status == -2:
+                    success = 1
+                    self.write(lib.jsonp.print_JSON({
+                        "success": success,
+                        "message": "revert_voted",
+                    }))
+                    self.vote_model.delete_vote_by_reply_id_and_trigger_user_id(reply_id, self.current_user["uid"])
+                else:
+                    success = status - pastVote["status"]
+                    self.write(lib.jsonp.print_JSON({
+                        "success": success,
+                        "message": "reverse_voted",
+                    }))
+                    self.vote_model.update_vote_by_reply_id_and_trigger_user_id(reply_id, self.current_user["uid"], {
+                        "status": status
+                    })
+                
+            else:
+                self.vote_model.add_new_vote({
+                    "trigger_user_id": self.current_user["uid"],
+                    "involved_type": 1, # 0: topic, 1: reply
+                    "involved_user_id": reply_info["author_id"],
+                    "involved_reply_id": reply_id,
+                    "status": status,
+                    "occurrence_time": time.strftime('%Y-%m-%d %H:%M:%S'),
+                })
+
+                success = status
+                self.write(lib.jsonp.print_JSON({
+                    "success": success,
+                    "message": "thanks_for_your_vote",
+                }))
+
+            score = reply_info["score"]
+            score = score + success
+
+            self.reply_model.update_reply_score_by_reply_id(reply_id, {
+                "score": score,
             })
 
-            success = status
-            self.write(lib.jsonp.print_JSON({
-                "success": success,
-                "message": "thanks_for_your_vote",
-            }))
-
-        score = topic_info["score"]
-        score = score + success
-
-        self.topic_model.update_topic_score_by_topic_id(topic_id, {
-            "score": score,
-        })
+        
 
         # update reputation of topic author
-        topic_time_diff = datetime.datetime.now() - topic_info["created"]
-        reputation = topic_info["author_reputation"] or 0
-        reputation = reputation + 2 * math.log(self.current_user["reputation"] or 0 + topic_time_diff.days + 10, 10)
-        self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
+        #topic_time_diff = datetime.datetime.now() - topic_info["created"]
+        #reputation = topic_info["author_reputation"] or 0
+        #reputation = reputation + 2 * math.log(self.current_user["reputation"] or 0 + topic_time_diff.days + 10, 10)
+        #self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
 
 class UserTopicsHandler(BaseHandler):
     def get(self, user, template_variables = {}):

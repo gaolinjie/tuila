@@ -12,14 +12,16 @@ class ReplyModel(Query):
         self.table_name = "reply"
         super(ReplyModel, self).__init__()
 
-    def get_all_replies_by_topic_id(self, topic_id, num = 16, current_page = 1):
+    def get_all_replies_by_topic_id(self, topic_id, uid, num = 16, current_page = 1):
         where = "topic_id = %s" % topic_id
-        join = "LEFT JOIN user ON reply.author_id = user.uid"
+        join = "LEFT JOIN user ON reply.author_id = user.uid \
+                LEFT JOIN vote ON (reply.id = vote.involved_reply_id) AND (%s = vote.trigger_user_id)" % uid
         order = "id ASC"
         field = "reply.*, \
                 user.username as author_username, \
                 user.nickname as author_nickname, \
-                user.avatar as author_avatar"
+                user.avatar as author_avatar, \
+                vote.status as vote_status"
         return self.where(where).order(order).join(join).field(field).pages(current_page = current_page, list_rows = num)
 
     def add_new_reply(self, reply_info):
@@ -55,5 +57,9 @@ class ReplyModel(Query):
 
     def update_reply_by_reply_id(self, reply_id, reply_info):
         where = "id = %s" % reply_id
+        return self.where(where).data(reply_info).save()
+
+    def update_reply_score_by_reply_id(self, reply_id, reply_info):
+        where = "reply.id = %s" % reply_id
         return self.where(where).data(reply_info).save()
 

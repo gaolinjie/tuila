@@ -34,3 +34,15 @@ class VoteModel(Query):
     def update_vote_by_topic_id_and_trigger_user_id(self, topic_id, trigger_user_id, vote_info):
         where = "involved_topic_id = %s AND trigger_user_id = %s" % (topic_id, trigger_user_id)
         return self.where(where).data(vote_info).save()
+
+    def get_vote_by_reply_id_and_trigger_user_id(self, reply_id, trigger_user_id):
+        where = "involved_reply_id = %s AND trigger_user_id = %s" % (reply_id, trigger_user_id)
+        return self.where(where).find()
+
+    def delete_vote_by_reply_id_and_trigger_user_id(self, reply_id, trigger_user_id):
+        where = "involved_reply_id = %s AND trigger_user_id = %s" % (reply_id, trigger_user_id)
+        return self.where(where).delete()
+
+    def update_vote_by_reply_id_and_trigger_user_id(self, reply_id, trigger_user_id, vote_info):
+        where = "involved_reply_id = %s AND trigger_user_id = %s" % (reply_id, trigger_user_id)
+        return self.where(where).data(vote_info).save()
