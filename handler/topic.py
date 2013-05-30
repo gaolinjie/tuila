@@ -234,9 +234,8 @@ class ViewHandler(BaseHandler):
 
         # update reputation of topic author
         if not self.current_user["uid"] == topic_info["author_id"] and not replied_info:
-            topic_time_diff = datetime.datetime.now() - topic_info["created"]
             reputation = topic_info["author_reputation"] or 0
-            reputation = reputation + 2 * math.log(self.current_user["reputation"] or 0 + topic_time_diff.days + 10, 10)
+            reputation = reputation + 2
             self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
 
         # self.get(form.tid.data)
@@ -299,8 +298,7 @@ class CreateHandler(BaseHandler):
 
         # update reputation of topic author
         reputation = self.current_user["reputation"] or 0
-        reputation = reputation - 5
-        reputation = 0 if reputation < 0 else reputation
+        reputation = reputation + 3
         self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
         self.redirect("/")
 
@@ -355,11 +353,6 @@ class EditHandler(BaseHandler):
 
         reply_id = self.topic_model.update_topic_by_topic_id(topic_id, update_topic_info)
 
-        # update reputation of topic author
-        reputation = topic_info["author_reputation"] or 0
-        reputation = reputation - 2
-        reputation = 0 if reputation < 0 else reputation
-        self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
         self.redirect("/t/%s" % topic_id)
 
 class ProfileHandler(BaseHandler):
@@ -463,8 +456,7 @@ class VoteHandler(BaseHandler):
                     }))
                     self.vote_model.update_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"], {
                         "status": status
-                    })
-                
+                    })              
             else:
                 self.vote_model.add_new_vote({
                     "trigger_user_id": self.current_user["uid"],
@@ -490,6 +482,11 @@ class VoteHandler(BaseHandler):
                 "score": score,
                 "hot": h
             })
+
+            # update reputation of topic author
+            reputation = topic_info["author_reputation"] or 0
+            reputation = reputation + 2 
+            self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
         else:
             if reply_id > 0:
                 status = 1;
@@ -563,13 +560,10 @@ class VoteHandler(BaseHandler):
                 "score": score,
             })
 
-        
-
-        # update reputation of topic author
-        #topic_time_diff = datetime.datetime.now() - topic_info["created"]
-        #reputation = topic_info["author_reputation"] or 0
-        #reputation = reputation + 2 * math.log(self.current_user["reputation"] or 0 + topic_time_diff.days + 10, 10)
-        #self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
+            # update reputation of topic author
+            reputation = reply_info["author_reputation"] or 0
+            reputation = reputation + 1 
+            self.user_model.set_user_base_info_by_uid(reply_info["author_id"], {"reputation": reputation})
 
 class UserTopicsHandler(BaseHandler):
     def get(self, user, template_variables = {}):
@@ -692,11 +686,6 @@ class ReplyEditHandler(BaseHandler):
 
         reply_id = self.reply_model.update_reply_by_reply_id(reply_id, update_reply_info)
 
-        # update reputation of topic author
-        reputation = self.current_user["reputation"] or 0
-        reputation = reputation - 2
-        reputation = 0 if reputation < 0 else reputation
-        self.user_model.set_user_base_info_by_uid(reply_info["author_id"], {"reputation": reputation})
         self.redirect("/t/%s" % reply_info["topic_id"])
 
 class FavoriteHandler(BaseHandler):
@@ -740,7 +729,7 @@ class FavoriteHandler(BaseHandler):
         # update reputation of topic author
         topic_time_diff = datetime.datetime.now() - topic_info["created"]
         reputation = topic_info["author_reputation"] or 0
-        reputation = reputation + 2 * math.log(self.current_user["reputation"] or 0 + topic_time_diff.days + 10, 10)
+        reputation = reputation + 3
         self.user_model.set_user_base_info_by_uid(topic_info["author_id"], {"reputation": reputation})
 
 class MembersHandler(BaseHandler):

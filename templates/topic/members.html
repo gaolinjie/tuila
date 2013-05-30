@@ -50,6 +50,7 @@
             <img src="/static/avatar/m_{{ user_info.avatar or 'default.png' }}?t={{ gen_random() }}" alt="" class="avatar" />
         </a>
         <div class="username">{{ user_info.username }}</div>
+        <div class="fr" id="money"><a href="/u/{{ user_info.username }}" class="balance_area" style="">{{ user_info.reputation // 100}} <img src="http://cdn.v2ex.com/static/img/silver.png" alt="S" align="absmiddle" border="0" style="padding-bottom: 2px;"> {{ user_info.reputation % 100}}  <img src="http://cdn.v2ex.com/static/img/bronze.png" alt="B" align="absmiddle" border="0"></a></div>
         <div class="website">
             <a href="{{ user_info.website or '' }}">{{ user_info.website or '' }}</a>
         </div>
