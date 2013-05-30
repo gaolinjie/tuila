@@ -428,20 +428,33 @@ class VoteHandler(BaseHandler):
             }))
             return
 
+        success = 0
         pastVote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
         if pastVote:
-            if pastVote["status"] + status:
+            if pastVote["status"] + status == 2:
+                success = -1
                 self.write(lib.jsonp.print_JSON({
-                    "success": 0,
-                    "message": "already_voted",
-                }))
-                return
-            else:
-                self.write(lib.jsonp.print_JSON({
-                    "success": status,
+                    "success": success,
                     "message": "revert_voted",
                 }))
                 self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+            elif pastVote["status"] + status == -2:
+                success = 1
+                self.write(lib.jsonp.print_JSON({
+                    "success": success,
+                    "message": "revert_voted",
+                }))
+                self.vote_model.delete_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+            else:
+                success = status - pastVote["status"]
+                self.write(lib.jsonp.print_JSON({
+                    "success": success,
+                    "message": "reverse_voted",
+                }))
+                self.vote_model.update_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"], {
+                    "status": status
+                    })
+                
         else:
             self.vote_model.add_new_vote({
                 "trigger_user_id": self.current_user["uid"],
@@ -452,13 +465,14 @@ class VoteHandler(BaseHandler):
                 "occurrence_time": time.strftime('%Y-%m-%d %H:%M:%S'),
             })
 
+            success = status
             self.write(lib.jsonp.print_JSON({
-                "success": status,
+                "success": success,
                 "message": "thanks_for_your_vote",
             }))
 
         score = topic_info["score"]
-        score = score + status
+        score = score + success
 
         self.topic_model.update_topic_score_by_topic_id(topic_id, {
             "score": score,

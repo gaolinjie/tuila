@@ -81,37 +81,39 @@
                 replyContent.val(newContent);
             });
 
-            $('div.answer img.vote').click(function() {
-                var id = $(this).parents('div.answer').attr('id').split('_')[1];
-                var vote_type = $(this).hasClass('up') ? 'up' : 'down';
+            $('div.vote-topic img.vote').click(function() {
+                var id = $(this).parents('div.vote-topic').attr('id').split('_')[1];
                 var lid = $(this).hasClass('up') ? id : -id;
+                var vote_type = $(this).hasClass('up') ? 'up' : 'down';
                 var un_vote_type = $(this).hasClass('up') ? 'down' : 'up';
-                var val = $(this).hasClass('up') ? 1 : -1;
-                var score = parseInt($('div.score').text())
-                if(!$(this).hasClass('selected')) {
-                    if($('img.'+un_vote_type).hasClass('selected')) {
+                var score = parseInt($('div.score-topic_'+id).text())
+                if($(this).hasClass('selected')) {
                         $.getJSON('/vote?topic_id='+lid, function(data) {
                             if(data.success!=0) {
-                                $('#answer_' + id)
-                                    .find('img.' + un_vote_type)
-                                    .attr('src', '/static/images/vote_' + un_vote_type + '.png')
+                                $('#vote-topic_' + id)
+                                    .find('img.' + vote_type)
+                                    .attr('src', '/static/images/vote_' + vote_type + '.png')
                                     .removeClass('selected');
-                                    $('div.score', '#answer_' + id).html(score+val);
+                                    $('div.score-topic_' + id, '#vote-topic_' + id).html(score+data.success);
                             }
-                        });
-                        return;
-                    }
-
+                        });                        
+                } else {
                     $.getJSON('/vote?topic_id='+lid, function(data) {
                         if(data.success!=0) {
-                            $('#answer_' + id)
+                            $('#vote-topic_' + id)
                                 .find('img.' + vote_type)
                                 .attr('src', '/static/images/vote_' + vote_type + '_selected.png')
                                 .addClass('selected');
-                            $('div.score', '#answer_' + id).html(score+val);
+                            $('div.score-topic_' + id, '#vote-topic_' + id).html(score+data.success);
                         }
-                    });                        
-                } 
+                        if(data.message=="reverse_voted") {
+                            $('#vote-topic_' + id)
+                                .find('img.' + un_vote_type)
+                                .attr('src', '/static/images/vote_' + un_vote_type + '.png')
+                                .removeClass('selected');
+                        }
+                    }); 
+                }
             });        
         });
     </script>
@@ -120,14 +122,14 @@
 {% block main %}
 <div class="topic-detail container-box">
     <div class="ui-header">
-        <div id="answer_{{ topic.id }}" class="answer">
+        <div id="vote-topic_{{ topic.id }}" class="vote-topic">
             {% if vote_status==1 %}
             <img src="/static/images/vote_up_selected.png" class="vote up selected">
             {% else %}
             <img src="/static/images/vote_up.png" class="vote up">
             {% endif %}
             
-            <div class="score">{{ topic.score }}</div>
+            <div class="score-topic_{{ topic.id }} score-topic">{{ topic.score }}</div>
 
             {% if vote_status==-1 %}
             <img src="/static/images/vote_down_selected.png" class="vote down selected">
@@ -190,17 +192,21 @@
             {% for reply in replies.list %}
             {% set floor = floor + 1 %}
         <div class="reply-item">
-            <div class="vote">
-            <a href="/">
-                <img src="/static/images/go-up.png" alt="" class="vote-up" />
-            </a>
-            <div class="vote-score">
-            <a href="/">0</a>
+            <div id="vote-reply_{{ reply.id }}" class="vote-reply">
+                {% if vote_status==1 %}
+                <img src="/static/images/vote_up_selected.png" class="vote up selected">
+                {% else %}
+                <img src="/static/images/vote_up.png" class="vote up">
+                {% endif %}
+            
+                <div class="score_{{ reply.id }} score-reply">{{ reply.score }}</div>
+
+                {% if vote_status==-1 %}
+                <img src="/static/images/vote_down_selected.png" class="vote down selected">
+                {% else %}
+                <img src="/static/images/vote_down.png" class="vote down">
+                {% endif %}           
             </div>
-            <a href="/">
-                <img src="/static/images/go-down.png" alt="" class="vote-down" />
-            </a>
-        </div>
             <a href="/u/{{ reply.author_username }}">
                 <img src="/static/avatar/m_{{ reply.author_avatar or 'default.png' }}?t={{ gen_random() }}" alt="" class="avatar" />
             </a>

@@ -31,3 +31,6 @@ class VoteModel(Query):
         where = "involved_topic_id = %s AND status = -1" % topic_id
         return self.where(where).count()
 
+    def update_vote_by_topic_id_and_trigger_user_id(self, topic_id, trigger_user_id, vote_info):
+        where = "involved_topic_id = %s AND trigger_user_id = %s" % (topic_id, trigger_user_id)
+        return self.where(where).data(vote_info).save()
