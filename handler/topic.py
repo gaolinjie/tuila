@@ -111,6 +111,7 @@ class ViewHandler(BaseHandler):
         page = int(self.get_argument("p", "1"))
         user_info = self.get_current_user()
         template_variables["user_info"] = user_info
+        user_id = 0
         if(user_info):
             template_variables["user_info"]["counter"] = {
                 "topics": self.topic_model.get_user_all_topics_count(user_info["uid"]),
@@ -119,10 +120,11 @@ class ViewHandler(BaseHandler):
                 "notifications": self.notification_model.get_user_unread_notification_count(user_info["uid"]),
                 "messages": self.message_model.get_user_unread_message_count(user_info["uid"]),
             }
+            user_id = user_info["uid"]
         template_variables["gen_random"] = gen_random
         template_variables["topic"] = self.topic_model.get_topic_by_topic_id(topic_id)
 
-        vote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, self.current_user["uid"])
+        vote = self.vote_model.get_vote_by_topic_id_and_trigger_user_id(topic_id, user_id)
         if (vote):
             template_variables["vote_status"] = vote["status"]
         else:
@@ -136,7 +138,7 @@ class ViewHandler(BaseHandler):
         template_variables["reply_num"] = reply_num
         template_variables["current_page"] = page
 
-        template_variables["replies"] = self.reply_model.get_all_replies_by_topic_id(topic_id, self.current_user["uid"], current_page = page)
+        template_variables["replies"] = self.reply_model.get_all_replies_by_topic_id(topic_id, user_id, current_page = page)
         template_variables["active_page"] = "topic"
         template_variables["hot_nodes"] = self.node_model.get_all_hot_nodes()
 

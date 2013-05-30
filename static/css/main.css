@@ -664,18 +664,19 @@ a.btn-small {
   display: block;
   vertical-align: baseline;
   text-align: center;
-
 }
 
  .topics .topic-item .vote-topic .vote {
   width: 24px;
   height: 24px;
+  cursor:pointer;
 }
 
 .topics .topic-item .vote-topic .score-topic {
   font-size: 14px;
   margin: -5px 0 -5px 0;
   color: #777;
+  cursor:text
 }
 
 
@@ -1013,18 +1014,19 @@ a.btn-small {
   display: block;
   vertical-align: baseline;
   text-align: center;
-
 }
 
  .topic-detail .ui-header .vote-topic .vote {
   width: 24px;
   height: 24px;
+  cursor:pointer;
 }
 
 .topic-detail .ui-header .vote-topic .score-topic {
   font-size: 14px;
   margin: -5px 0 -5px 0;
   color: #777;
+  cursor:text;
 }
 
 
@@ -1107,18 +1109,19 @@ a.btn-small {
   display: block;
   vertical-align: baseline;
   text-align: center;
-
 }
 
  .topic-reply .ui-content .reply-item .vote-reply .vote-reply-img {
   width: 18px;
   height: 18px;
+  cursor:pointer;
 }
 
 .topic-reply .ui-content .reply-item .vote-reply .score-reply {
   font-size: 10px;
   margin: -5px 0 -5px 0;
   color: #777;
+  cursor:text;
 }
 
       .topic-reply .ui-content .reply-item .avatar {
