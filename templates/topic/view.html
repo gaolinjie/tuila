@@ -1,7 +1,7 @@
 {% extends 'snippet/layout.html' %}
 
 {% block title %}
-    {{ topic.title }} - 叁年壹班
+    {{ topic.title }} - 推啦
 {% endblock %}
 
 {% block stylesheet %}
@@ -33,8 +33,8 @@
             $('.J_topicVote').click(function(e) {
                 var _node = $(this);
                 var _errorMap = {
-                    topic_not_exist: '话题不存在',
-                    can_not_vote_your_topic: '不能喜欢自己的话题',
+                    topic_not_exist: '主题不存在',
+                    can_not_vote_your_topic: '不能喜欢自己的主题',
                     already_voted: '感谢已经表示过',
                 };
                 e.preventDefault();
@@ -50,8 +50,8 @@
             $('.J_topicFavorite').click(function(e) {
                 var _node = $(this);
                 var _errorMap = {
-                    topic_not_exist: '话题不存在',
-                    can_not_favorite_your_topic: '不能收藏自己的话题',
+                    topic_not_exist: '主题不存在',
+                    can_not_favorite_your_topic: '不能收藏自己的主题',
                     already_favorited: '之前已经收藏过了',
                 };
                 e.preventDefault();
@@ -208,10 +208,10 @@
         {#
         <a href="#" onclick="window.open('https://twitter.com/intent/tweet?hashtags={{ topic.node_slug }}&text={{ topic.title }}&url=http://{{ request.host }}{{ request.uri }}');">Tweet</a>
         #}
-        <a href="#" onclick="window.open('http://service.weibo.com/share/share.php?url=http://{{ request.host }}{{ request.uri }}&title={叁年壹班}%20-%20{{ topic.title }}', '_blank', 'width=550, height=370');">新浪微博</a>
+        <a href="#" onclick="window.open('http://service.weibo.com/share/share.php?url=http://{{ request.host }}{{ request.uri }}&title={推啦}%20-%20{{ topic.title }}', '_blank', 'width=550, height=370');">新浪微博</a>
         <a href="/vote?topic_id={{ topic.id }}" class="J_topicVote">喜欢</a>
         {% if current_user and current_user.uid == topic.author_id %}
-        <a href="/t/edit/{{ topic.id }}" class="fr">编辑话题</a>
+        <a href="/t/edit/{{ topic.id }}" class="fr">编辑主题</a>
         {% endif %}
         <span class="hits fr mr10">{{ topic.hits or 0 }} 次点击</span>
     </div>
@@ -313,7 +313,7 @@
     </div>
     <div class="ui-content">
         <div class="status status-topic"> <strong><a href="/u/{{ user_info.username }}/topics">{{ user_info.counter.topics }}</a></strong> 
-            话题
+            主题
         </div>
         <div class="status status-reply">
             <strong><a href="/u/{{ user_info.username }}/replies">{{ user_info.counter.replies }}</a></strong> 
@@ -360,20 +360,20 @@
 {% endif %}
 <div class="sidebox container-box mt10 ">
     <div class="ui-header">
-        <span class="title" style="color: #009a61">这是什么网站？<div class="fr"><a href="http://3n1b.com/t/1">了解更多</a></div></span>
+        <span class="title" style="color: #009a61">这是什么网站？<div class="fr"><a href="http://tuila.me/t/1">了解更多</a></div></span>
     </div>
     <div class="ui-content">
-        叁年壹班是一个全国性的校园BBS社区，我们打破了传统校园BBS的封闭性，注册之后您不但可以关注您自己学校的最新动态还可以探索全国所有高校的同学热议的话题。
+        推啦是一个极客资讯聚合社区，在这里你可以浏览和分享最新、最酷的科技资讯，通过用户投票和评论来过滤出最有价值的信息，努力成为极客们青睐的信息源。
         <p class="hor-tabs" style="margin-bottom: 0px">
             <a href="/register" style="color: #009a61">立即注册</a>
             <i></i>
-            <a href="http://3n1b.com/t/2" style="color: #009a61">如何发帖</a>
+            <a href="http://tuila.me/t/2" style="color: #009a61">如何发帖</a>
         </p>
     </div>
 </div>
 <div class="sidebox container-box mt10 ">
     <div class="ui-header">
-        <span class="title">最热小组<div class="fr"><a href="/nodes">all</a></div></span>
+        <span class="title">最热节点<div class="fr"><a href="/nodes">all</a></div></span>
     </div>
     <div class="ui-content hot-nodes">
         {% for node in hot_nodes %}
@@ -393,7 +393,7 @@
             <li>[链接名称](http://...)</li>
             <li> `高亮文本`</li>       
             <li>换行行末加两空格</li>
-            <li><a href="http://3n1b.com" target="_blank">如何添加图片...</a></li>
+            <li><a href="http://tuila.me" target="_blank">如何添加图片...</a></li>
         </ul>
     </div>
 </div>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 #
-# Copyright 2013 3n1b.com
+# Copyright 2013 tuila.me
 
 import uuid
 import hashlib
@@ -67,11 +67,11 @@ class IndexHandler(BaseHandler):
         template_variables["hot_nodes"] = self.node_model.get_all_hot_nodes()
         template_variables["hot_topics"] = self.topic_model.get_all_hot_topics()         
         template_variables["gen_random"] = gen_random    
-        notice_text = "暂时还没有话题，发出您的讨论吧。"
+        notice_text = "暂时还没有主题，发出您的讨论吧。"
         if (tab == "interest"):
-            notice_text = "这里列出了您所关注小组下的最新话题，暂时还没有话题，发出您的讨论吧。"
+            notice_text = "这里列出了您所关注节点下的最新主题，暂时还没有主题，发出您的讨论吧。"
         if (tab == "follows"):
-            notice_text = "这里列出了您所关注同学的最新话题，暂时还没有话题，发出你的讨论吧。"
+            notice_text = "这里列出了您所关注同学的最新主题，暂时还没有主题，发出你的讨论吧。"
         template_variables["notice_text"] = notice_text
         template_variables["wallpaper"] = self.get_wallpaper()
         self.render("topic/topics.html", **template_variables)
@@ -339,7 +339,7 @@ class EditHandler(BaseHandler):
 
         if(not topic_info["author_id"] == self.current_user["uid"]):
             template_variables["errors"] = {}
-            template_variables["errors"]["invalid_permission"] = [u"没有权限修改该话题"]
+            template_variables["errors"]["invalid_permission"] = [u"没有权限修改该主题"]
             self.get(topic_id, template_variables)
             return
 

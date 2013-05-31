@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 #
-# Copyright 2013 3n1b.com
+# Copyright 2013 tuila.me
 
 from wtforms import TextField, validators
 from lib.forms import Form
@@ -88,7 +88,7 @@ class SettingForm(Form):
     ])
     website = TextField('Website', [
         validators.Optional(),
-        validators.URL(message = "请填写合法的URL地址（如：http://3n1b.com）")
+        validators.URL(message = "请填写合法的URL地址（如：http://tuila.me）")
     ])
     company = TextField('Company', [
         validators.Optional(),

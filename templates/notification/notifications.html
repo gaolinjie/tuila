@@ -16,7 +16,7 @@
 {% block main %}
 <div class="notifications container-box">
     <div class="ui-header">
-        <span class="bread-nav"><a href="/">叁年壹班</a> › 提醒消息</span>
+        <span class="bread-nav"><a href="/">推啦</a> › 提醒消息</span>
     </div>
 
     <div class="ui-content">
@@ -36,7 +36,7 @@
                 {% elif notification.involved_type == 1 %}
                 <span class="title">
                     <a href="/u/{{ notification.trigger_username }}">{{ notification.trigger_username }}</a>
-                    回复了您的话题
+                    回复了您的主题
                     <a href="/t/{{ notification.involved_topic_id }}">{{ notification.involved_topic_title }}</a>
                 </span>
                 {% endif %}
@@ -73,7 +73,7 @@
     </div>
     <div class="ui-content">
         <div class="status status-topic"> <strong><a href="/u/{{ user_info.username }}/topics">{{ user_info.counter.topics }}</a></strong> 
-            话题
+            主题
         </div>
         <div class="status status-reply"> <strong><a href="/u/{{ user_info.username }}/replies">{{ user_info.counter.replies }}</a></strong> 
             回复

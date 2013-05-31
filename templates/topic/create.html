@@ -23,9 +23,9 @@
 {% block main %}
 <div class="topic-create container-box">
     <div class="ui-header">
-        <span class="title">创建新话题 
+        <span class="title">创建新主题 
             <span class="label label-success" style="margin-left:8px">
-                <a href="http://www.3n1b.com/t/2" style="color:#FFFFFF">发帖指南</a>
+                <a href="http://www.tuila.me/t/2" style="color:#FFFFFF">发帖指南</a>
             </span>
         </span>
     </div>
@@ -35,14 +35,14 @@
             {{ errors|dump_errors }}
             <div class="input-prepend mt10">
                 <span class="add-on">#</span>
-                <input class="span11" id="prependedInput" type="text" placeholder="话题" name="title"></div>
-            <textarea rows="3" class="content mt5 smart-code-support" placeholder="请先在下方选择学校和小组，再编辑内容。" name="content"></textarea>
+                <input class="span11" id="prependedInput" type="text" placeholder="主题" name="title"></div>
+            <textarea rows="3" class="content mt5 smart-code-support" placeholder="请先在下方选择学校和节点，再编辑内容。" name="content"></textarea>
             <div class="btn-group">
                 <button class="btn dropdown-toggle btn-small" data-toggle="dropdown">{{ node.name }}<span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="#">{{ node.name }}</a></li>
                     <li class="divider"></li>
-                    <li><a href="/s/node/?n={{ node.slug }}">修改小组...</a></li>
+                    <li><a href="/s/node/?n={{ node.slug }}">修改节点...</a></li>
                 </ul>
             </div>
             <input type="submit" id="checkall" class="btn btn-small" value="立即创建">{{ xsrf_form_html() }}
@@ -67,7 +67,7 @@
     </div>
     <div class="ui-content">
         <div class="status status-topic"> <strong><a href="/u/{{ user_info.username }}/topics">{{ user_info.counter.topics }}</a></strong> 
-            话题
+            主题
         </div>
         <div class="status status-reply"> <strong><a href="/u/{{ user_info.username }}/replies">{{ user_info.counter.replies }}</a></strong> 
             回复
@@ -104,20 +104,20 @@
 {% endif %}
 <div class="sidebox container-box mt10 ">
     <div class="ui-header">
-        <span class="title" style="color: #009a61">这是什么网站？<div class="fr"><a href="http://3n1b.com/t/1">了解更多</a></div></span>
+        <span class="title" style="color: #009a61">这是什么网站？<div class="fr"><a href="http://tuila.me/t/1">了解更多</a></div></span>
     </div>
     <div class="ui-content">
-        叁年壹班是一个全国性的校园BBS社区，我们打破了传统校园BBS的封闭性，注册之后您不但可以关注您自己学校的最新动态还可以探索全国所有高校的同学热议的话题。
+        推啦是一个极客资讯聚合社区，在这里你可以浏览和分享最新、最酷的科技资讯，通过用户投票和评论来过滤出最有价值的信息，努力成为极客们青睐的信息源。
         <p class="hor-tabs" style="margin-bottom: 0px">
             <a href="/register" style="color: #009a61">立即注册</a>
             <i></i>
-            <a href="http://3n1b.com/t/2" style="color: #009a61">如何发帖</a>
+            <a href="http://tuila.me/t/2" style="color: #009a61">如何发帖</a>
         </p>
     </div>
 </div>
 <div class="sidebox container-box mt10 ">
     <div class="ui-header">
-        <span class="title">最热小组<div class="fr"><a href="/nodes">all</a></div></span>
+        <span class="title">最热节点<div class="fr"><a href="/nodes">all</a></div></span>
     </div>
     <div class="ui-content hot-nodes">
         {% for node in hot_nodes %}
@@ -137,7 +137,7 @@
             <li>[链接名称](http://...)</li>
             <li> `高亮文本`</li>       
             <li>换行行末加两空格</li>
-            <li><a href="http://3n1b.com" target="_blank">如何添加图片...</a></li>
+            <li><a href="http://tuila.me" target="_blank">如何添加图片...</a></li>
         </ul>
     </div>
 </div>
