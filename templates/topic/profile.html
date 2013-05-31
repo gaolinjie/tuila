@@ -65,6 +65,9 @@
                 <div class="number">推啦 第{{ user_info.uid }}号成员</div>
                 <div class="since">入住于 {{ user_info.created.date() }}</div>
             </div>
+            {% if show_follow %}
+                <span class="label label-warning pull-right" style="margin-left:4px"><a href="/m/{{user_info.username}}" style="color:#FFFFFF">私信</a></span>
+            {% endif %}
 
         </div>
         <div class="ui-content">
@@ -91,9 +94,7 @@
                 <dd>{{ user_info.signature }}</dd>
             </dl>
             {% endif %}
-            {% if show_follow %}
-                <span class="label label-warning pull-right" style="margin-left:4px"><a href="/m/{{user_info.username}}" style="color:#FFFFFF">私信</a></span>
-            {% endif %}
+            
         </div>
     </div>
 
