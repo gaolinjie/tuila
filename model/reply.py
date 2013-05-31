@@ -53,10 +53,13 @@ class ReplyModel(Query):
 
     def get_reply_by_reply_id(self, reply_id):
         where = "id = %s" % reply_id
-        return self.where(where).find()
+        join = "LEFT JOIN user AS author_user ON reply.author_id = author_user.uid"
+        field = "reply.*, \
+                author_user.reputation as author_reputation"
+        return self.where(where).join(join).field(field).find()
 
     def update_reply_by_reply_id(self, reply_id, reply_info):
-        where = "id = %s" % reply_id
+        where = "id = %s" % reply_id      
         return self.where(where).data(reply_info).save()
 
     def update_reply_score_by_reply_id(self, reply_id, reply_info):
